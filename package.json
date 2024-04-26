@@ -1,0 +1,21 @@
+{
+  "name": "pikanvas",
+  "module": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "bun run --watch src/index.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@napi-rs/canvas": "^0.1.52",
+    "all-minecraft": "^1.0.14",
+    "escape-minecraft-colors": "^1.0.1",
+    "hono": "^4.2.7",
+    "pika-api.js": "^1.0.9"
+  }
+}
