@@ -23,24 +23,30 @@ app.get("/profile/:username", async (ctx) => {
   const context = canvas.getContext("2d", {
     alpha: false,
   });
-  context.font = "35px Montserrat";
   const user = new MinecraftPlayerInfo({ usernameOrUUID: username });
+
+  // MARK: Background
+
   const background = await Canvas.loadImage(
     fs.readFileSync(`assets/background${data.clan ? "-guild" : ""}.png`)
   );
   context.drawImage(background, 0, 0, canvas.width, canvas.height);
+
+  // MARK: User Info
+
+  context.font = "35px Montserrat";
+  context.fillStyle = "#fff";
   const avatar = await Canvas.loadImage(
     new URL(user.getHead({ helm: true }).headIsometric)
   );
   context.drawImage(avatar, 35, 35, 80, 80);
-  context.fillStyle = "#fff";
   context.fillText(data.username, 135, 85, 300);
+
+  // MARK: Rank Info
 
   context.fillStyle = "#00F7FF";
   context.textAlign = "center";
   context.font = "32px Minecraft";
-  if (data.clan)
-    context.fillText(`${data.clan.name} [${data.clan.tag}]`, 680, 270, 175);
   const rank =
     [
       "Trial",
@@ -59,9 +65,6 @@ app.get("/profile/:username", async (ctx) => {
     270,
     160
   );
-
-  data.lastSeen;
-
   context.fillStyle = "#00FF08";
   context.font = "20px Minecraft";
   if (data.clan) context.fillText(data.clan.owner.username, 677.5, 335, 180);
@@ -85,6 +88,9 @@ app.get("/profile/:username", async (ctx) => {
     410,
     200
   );
+
+  // MARK: Data
+
   context.fillText(data.friends.length.toString(), 400, 290);
 
   const badgeYStart = 330; // Starting Y position for badges
@@ -116,7 +122,18 @@ app.get("/profile/:username", async (ctx) => {
     // biome-ignore lint/style/noNonNullAssertion: <explanation>
     context.fillText(badge!.name, 400, badgeY + 25);
   });
-  data;
+
+  // MARK: Guild Info
+  if (data.clan) {
+    context.fillStyle = "#00F7FF";
+    context.textAlign = "center";
+    context.font = "32px Minecraft";
+    context.fillText(`${data.clan.name} [${data.clan.tag}]`, 680, 270, 175);
+    context.fillStyle = "#00FF08";
+    context.font = "20px Minecraft";
+    context.fillText(data.clan.owner.username, 677.5, 335, 180);
+  }
+
   return ctx.html(`<img src="${await canvas.toDataURLAsync()}"></img>`);
 });
 export default app;
